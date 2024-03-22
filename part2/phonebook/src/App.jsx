@@ -22,11 +22,18 @@ const App = () => {
       alert(`${newName} is already in added to the phonebook`)
     } else {
       const newPerson = { name: newName, number: newNumber}
-      personService.create()
+      personService.create(newPerson)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
       setNewName('')
       setNewNumber('')
     } 
+  }
+
+  const removePerson = (id) => {
+    if (window.confirm(`Delete ${persons.find(person => person.id === id).name}`)) {
+      personService.remove(id)
+        .then(returnedPerson => setPersons(persons.filter(person => person.id !== returnedPerson.id)))
+    }
   }
 
   const handleNameChange = (event) => {
@@ -41,7 +48,6 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -50,7 +56,7 @@ const App = () => {
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
        newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterName={filterName} />
+      <Persons persons={persons} filterName={filterName} removePerson={removePerson} />
     </div>
   )
 }
