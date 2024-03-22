@@ -4,7 +4,6 @@ import Persons from './components/Persons'
 import personService from './services/persons'
 import { useEffect, useState } from 'react'
 
-
 const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -19,16 +18,13 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.filter(person => person.name === newName).length > 0) {
-      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one`)) {
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
         const id = persons.find(person => person.name === newName).id
         const newPerson = {name: newName, number: newNumber}
         personService.update(id, newPerson)
-          .then(response => {
-            setPersons(persons.map(person => person.id !== id ? person : response))
-          })
-      }
-    }
-    else {
+          .then(response => setPersons(persons.map(person => person.id !== id ? person : response)))
+      } 
+    } else {
       const newPerson = { name: newName, number: newNumber}
       personService.create(newPerson)
         .then(response => setPersons(persons.concat(response)))
