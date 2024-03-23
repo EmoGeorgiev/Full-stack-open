@@ -32,6 +32,12 @@ const App = () => {
               setMessage(null)
             }, 5000)
           })
+          .catch(error => {
+            setMessage(`Informaton of ${newName} has already been removed from the server`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
       } 
     } else {
       const newPerson = { name: newName, number: newNumber}
