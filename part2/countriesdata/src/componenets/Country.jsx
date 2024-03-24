@@ -1,5 +1,14 @@
+import { useState } from "react"
+
 const Country = ({ name, capital, area, languages, flag, isUnique }) => {
-    if (isUnique) {
+    const [isShown, setIsShown] = useState(isUnique)
+    
+    const handleShow = () => {
+        console.log("hey")
+        setIsShown(!isShown)
+    }
+    
+    if (isShown) {
         return (
             <div>
                 <h2>{name}</h2>
@@ -12,12 +21,15 @@ const Country = ({ name, capital, area, languages, flag, isUnique }) => {
                     {Object.keys(languages).map(key => <li key={key}>{languages[key]}</li>)}
                 </ul>
                 <img src={flag} />
+                <div>
+                    <button onClick={handleShow}>hide</button>
+                </div>
             </div>
         )
     } else {
         return (
             <div>
-                {name}
+                {name} <button onClick={handleShow}>show</button>
             </div>
         )
     }
