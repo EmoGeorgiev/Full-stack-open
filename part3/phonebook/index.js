@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 let phonebook = [
     { 
@@ -25,6 +26,7 @@ let phonebook = [
 ]
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/api/persons', (req, res) => {
     res.json(phonebook)
@@ -48,7 +50,6 @@ app.get('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     phonebook = phonebook.filter(person => person.id !== id)
-    console.log(phonebook)
     res.status(204).end()
 })
 
