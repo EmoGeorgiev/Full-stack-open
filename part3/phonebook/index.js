@@ -24,6 +24,8 @@ let phonebook = [
     }
 ]
 
+app.use(express.json())
+
 app.get('/api/persons', (req, res) => {
     res.json(phonebook)
 })
@@ -48,6 +50,13 @@ app.delete('/api/persons/:id', (req, res) => {
     phonebook = phonebook.filter(person => person.id !== id)
     console.log(phonebook)
     res.status(204).end()
+})
+
+app.post('/api/persons', (req, res) => {
+    const id = Math.floor(Math.random() * 1000000)
+    const person = {"id": id, "name": req.body["name"], "number": req.body["number"]}
+    phonebook.push(person)
+    res.json(person)
 })
 
 const PORT = 3001
