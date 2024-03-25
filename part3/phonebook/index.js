@@ -53,8 +53,19 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-    const id = Math.floor(Math.random() * 1000000)
-    const person = {"id": id, "name": req.body["name"], "number": req.body["number"]}
+    const name = req.body["name"]
+    const number = req.body["number"]
+    if (!name) {
+        res.status(404).json({error: "name is missing"})
+    }
+    if (!number) {
+        res.status(404).json({error: "number is missing"})
+    }
+    if (phonebook.filter(person => person.name === name).length > 0) {
+        res.status(409).json({error: "the name already exists in the phonebook"})
+    }
+    const id = Math.floor(Math.random() * 1000000000)
+    const person = {id, name, number}
     phonebook.push(person)
     res.json(person)
 })
