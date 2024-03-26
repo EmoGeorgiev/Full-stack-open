@@ -60,12 +60,6 @@ app.get('/api/persons', (req, res) => {
 //     }
 // })
 
-// app.delete('/api/persons/:id', (req, res) => {
-//     const id = Number(req.params.id)
-//     phonebook = phonebook.filter(person => person.id !== id)
-//     res.status(204).end()
-// })
-
 app.post('/api/persons', (req, res) => {
     const name = req.body.name
     const number = req.body.number
@@ -85,6 +79,15 @@ app.post('/api/persons', (req, res) => {
         res.json(savedPerson)
     })
 })
+
+app.delete('/api/persons/:id', (req, res) => {
+    Person.findByIdAndDelete(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+})
+
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
