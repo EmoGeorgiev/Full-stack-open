@@ -1,43 +1,18 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const config = require('./utils/config')
+const blogsRouter = require('./controllers/blogs')
 const mongoose = require('mongoose')
+const logger = require('./utils/logger')
 
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
-
-const mongoUrl = 'mongodb+srv://emogeorgiev788:thevoidwalker15@cluster0.uevbvoz.mongodb.net/bloglistApp?retryWrites=true&w=majority&appName=Cluster0'
-
-mongoose.connect(mongoUrl).then(() => console.log('connected to MONGO'))
+mongoose.set('strictQuery', false)
+mongoose.connect(config.MONGODB_URI)
+    .then(() => logger.info('connected to Mongo'))
+    .catch((error) => logger.error('error connecting to MongoDB', error.message))
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/blogs', blogsRouter)
 
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
-
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+module.exports = app
