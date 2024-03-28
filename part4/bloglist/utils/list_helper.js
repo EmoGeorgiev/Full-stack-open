@@ -31,10 +31,37 @@ const favouriteBlog = (blogs) => {
     return result
 }
 
+const mostBlogs = (blogs) => {
+    if (blogs.length === 0) {
+        return { author: '', blogs: 0 }
+    } 
+    
+    const authors = Array.from(new Set(blogs.map(blog => blog.author)))
+    let currentMostAuthor = authors[0]
+    let currentMostBlogs = 0
 
+    for (let i = 0; i < authors.length; i++) {
+        let currentAuthor = authors[i]
+        let currentBlogs = 0
+        for (let j = 0; j < blogs.length; j++) {
+            if (currentAuthor === blogs[j].author) {
+                currentBlogs++
+            }
+        }
+        if (currentBlogs > currentMostBlogs) {
+            currentMostAuthor = currentAuthor
+            currentMostBlogs = currentBlogs
+        }
+    }
+    return {
+        author: currentMostAuthor,
+        blogs: currentMostBlogs
+    }
+}
 
 module.exports = {
     dummy,
     totalLikes,
     favouriteBlog,
-}
+    mostBlogs,
+} 
