@@ -16,7 +16,6 @@ const favouriteBlog = (blogs) => {
     if (blogs.length === 0) {
         return {}
     }
-
     let current = blogs[0]
 
     for (let i = 1; i < blogs.length; i++) {
@@ -24,13 +23,15 @@ const favouriteBlog = (blogs) => {
             current = blogs[i]
         }
     }
-    result = {
+    const result = {
         title: current.title,
         author: current.author,
         likes: current.likes
     }
     return result
 }
+
+
 
 module.exports = {
     dummy,
