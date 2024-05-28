@@ -69,7 +69,7 @@ const App = () => {
     )
   }
 
-  const handleCreateBlog = async blogObject => {
+  const createBlog = async blogObject => {
     blogFormRef.current.toggleVisibility()
 
     try {
@@ -90,13 +90,29 @@ const App = () => {
   const updateBlog = async updatedBlog => {
     try {
       const newBlog = await blogService.update(updatedBlog)
-      setMessage(`Blog ${newBlog.title} was updated successfully`)
       setBlogs(blogs.map(blog => blog.id !== newBlog.id ? blog : newBlog))
+      setMessage(`Blog ${newBlog.title} was updated successfully`)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
     } catch (error) {
       setMessage(`Blog was not updated successfully`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
+  const removeBlog = async id => {
+    try {
+      await blogService.remove(id)
+      setMessage(`Blog was removed successfully`)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      setMessage('Blog could not be removed')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -127,12 +143,12 @@ const App = () => {
         <button type="submit" onClick={logOut}>logout</button>
       </div>
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
-          <BlogForm createBlog={handleCreateBlog}/>
+          <BlogForm createBlog={createBlog}/>
       </Togglable>
       {
         blogs.sort((a, b) => a.likes - b.likes)
               .map(blog =>
-                <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+                <Blog key={blog.id} blog={blog} username={user.username} updateBlog={updateBlog} removeBlog={removeBlog} />
               )
       }
     </div>
