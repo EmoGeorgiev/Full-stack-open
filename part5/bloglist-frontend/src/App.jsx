@@ -69,17 +69,38 @@ const App = () => {
     )
   }
 
-  const handleCreateBlog = (blogObject) => {
+  const handleCreateBlog = async blogObject => {
     blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(blog => {
-        setBlogs(blogs.concat(blog))
-        setMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      })
+
+    try {
+      const blog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(blog))
+      setMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      setMessage(`new blog was not added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
+  const updateBlog = async updatedBlog => {
+    try {
+      const newBlog = await blogService.update(updatedBlog)
+      setMessage(`Blog ${newBlog.title} was updated successfully`)
+      setBlogs(blogs.map(blog => blog.id !== newBlog.id ? blog : newBlog))
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (error) {
+      setMessage(`Blog was not updated successfully`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
   }
 
   const logOut = () => {
@@ -109,7 +130,7 @@ const App = () => {
           <BlogForm createBlog={handleCreateBlog}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
     </div>
   ) 
