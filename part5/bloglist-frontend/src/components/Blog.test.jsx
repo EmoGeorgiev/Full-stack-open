@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
-import { describe } from 'vitest'
+import { beforeEach, describe } from 'vitest'
+import userEvent from '@testing-library/user-event'
 
 describe('Blog tests', () => {
     const blog = {
@@ -10,15 +11,27 @@ describe('Blog tests', () => {
         url: 'https://example.com/test',
         user: {username: 'test', user: 'test', password: ' '}
     }
-
+    let container;
     const updateBlog = vi.fn()
     const removeBlog = vi.fn()
 
+    beforeEach(() => {
+        container = render(
+            <Blog blog={blog} username='test' updateBlog={updateBlog} removeBlog={removeBlog} />).container
+    })
+
+
     test('renders only title and author', () => {
-        const { container } = render(<Blog blog={blog} username='test' updateBlog={updateBlog} removeBlog={removeBlog} />)
         expect(container).toHaveTextContent('test testAuthor')
     })
 
+    test('renders url and likes', async () => { 
+        const user = userEvent.setup()
+        const button = screen.getByText('view')
+        await user.click(button)
+        expect(container).toHaveTextContent('https://example.com/test')
+        expect(container).toHaveTextContent('likes 5')
+    })
 })
 
 
