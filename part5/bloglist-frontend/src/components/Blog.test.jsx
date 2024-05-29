@@ -32,6 +32,14 @@ describe('Blog tests', () => {
         expect(container).toHaveTextContent('https://example.com/test')
         expect(container).toHaveTextContent('likes 5')
     })
+
+    test('received event handler for like button is called twice', async () => {
+        const user = userEvent.setup()
+        const button = screen.getByText('like')
+        await user.click(button)
+        await user.click(button)
+        expect(updateBlog.mock.calls).toHaveLength(2)
+    })
 })
 
 
