@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, vi, expect } from 'vitest'
 import Blog from './Blog'
-import { beforeEach, describe } from 'vitest'
 import userEvent from '@testing-library/user-event'
 
 describe('Blog tests', () => {
