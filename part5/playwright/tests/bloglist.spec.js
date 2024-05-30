@@ -32,5 +32,17 @@ describe('Blog app', () => {
         await loginWith(page, 'wrongUser', 'wrongPassword')
         await expect(page.getByText('wrong username or password')).toBeVisible()
     })
+
+    describe('When logged in', () => {
+        beforeEach(async ({ page }) => {
+            loginWith(page, 'mluukkai', 'salainen')
+        })
+      
+        test('a new blog can be created', async ({ page }) => {
+            await createBlog(page, 'test', 'testAuthor', 'https://example.com/test')
+            await expect(page.getByText('test testAuthor')).toBeVisible()
+        })
+    })
+    
   })
 })
