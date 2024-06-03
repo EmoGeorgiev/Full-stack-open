@@ -63,9 +63,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('url')
 
 
   const handleSubmit = (e) => {
@@ -78,10 +78,17 @@ const CreateNew = (props) => {
     })
   }
 
+  const clearForm = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input {...content} />
@@ -94,7 +101,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button onClick={handleSubmit}>create</button>
+        <button onClick={clearForm}>reset</button>
       </form>
     </div>
   )
